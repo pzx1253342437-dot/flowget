@@ -1,0 +1,14 @@
+# Dependencies & build artifacts
+node_modules/
+build/
+data/
+
+# Windows shortcuts & OS files
+*.lnk
+Thumbs.db
+Desktop.ini
+
+# Logs & secrets
+*.log
+.env
+.env.*

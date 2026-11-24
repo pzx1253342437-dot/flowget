@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FlowGet</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="mark">FG</span>
+        <div>
+          <h1>FlowGet</h1>
+          <p>多连接 HTTP 下载与种子任务</p>
+        </div>
+      </div>
+      <div class="top-status">
+        <span class="dot" id="serverDot"></span>
+        <span id="serverText">正在连接本地服务</span>
+      </div>
+    </header>
+
+    <section class="composer">
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="http" role="tab">HTTP 下载</button>
+        <button class="tab" data-tab="torrent" role="tab">种子任务</button>
+      </div>
+
+      <form id="httpForm" class="pane active" data-pane="http" autocomplete="off">
+        <label class="field wide">
+          <span>下载地址</span>
+          <input id="urlInput" name="url" type="url" placeholder="https://example.com/file.zip" required>
+        </label>
+        <div class="row">
+          <label class="field">
+            <span>保存文件名</span>
+            <input id="filenameInput" name="filename" type="text" placeholder="留空就从地址推断">
+          </label>
+          <label class="field narrow">
+            <span>连接数</span>
+            <input id="connectionsInput" name="connections" type="number" min="1" max="32" value="8">
+          </label>
+          <label class="field narrow headers-field">
+            <span>请求头</span>
+            <input id="headersInput" name="headers" type="text" placeholder="Cookie: ...">
+          </label>
+        </div>
+        <div class="actions">
+          <button class="primary" type="submit">开始下载</button>
+          <span class="hint">服务器支持 Range 时会自动拆成多段并行拉取</span>
+        </div>
+      </form>
+
+      <form id="torrentForm" class="pane" data-pane="torrent" autocomplete="off">
+        <label class="field wide">
+          <span>磁力链接</span>
+          <input id="magnetInput" name="magnet" type="text" placeholder="magnet:?xt=urn:btih:...">
+        </label>
+        <div class="row">
+          <label class="field">
+            <span>或者选择 .torrent 文件</span>
+            <input id="torrentFileInput" name="torrentFile" type="file" accept=".torrent,application/x-bittorrent">
+          </label>
+          <label class="check">
+            <input id="seedInput" type="checkbox">
+            <span>下载完继续做种</span>
+          </label>
+        </div>
+        <div class="actions">
+          <button class="primary" type="submit">添加种子</button>
+          <span class="hint">磁力链接首次需要连上 DHT 或 Tracker 获取元数据</span>
+        </div>
+      </form>
+    </section>
+
+    <section class="task-head">
+      <h2>任务</h2>
+      <div class="filters">
+        <button class="filter active" data-filter="all">全部</button>
+        <button class="filter" data-filter="active">进行中</button>
+        <button class="filter" data-filter="done">已完成</button>
+      </div>
+    </section>
+
+    <section id="taskList" class="task-list">
+      <div class="empty" id="emptyState">
+        <strong>还没有任务</strong>
+        <span>贴一个直链，或者丢一个种子进来。</span>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span id="dataPath">数据目录读取中</span>
+      <span>只监听本机，不开外网端口</span>
+    </footer>
+  </div>
+  <div id="toast" class="toast" role="status"></div>
+  <script src="/app.js" type="module"></script>
+</body>
+</html>
